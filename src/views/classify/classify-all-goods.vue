@@ -10,7 +10,7 @@
                 <van-tab v-for="(item, index) in childCategoryList" :title="item.title" :key="index"></van-tab>
             </van-tabs>
             <!-- <ClassifyItem v-for="(item, index) in childCategoryList" :itemData="item" :key="index"></ClassifyItem> -->
-            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
                 <LoadMore :scrollEl="$refs.right" :onLoadMore="onLoadMore" :enableLoadMore="enableLoadMore">
                     <van-card
                         v-for="(item, index) in listData"
@@ -21,14 +21,31 @@
                         :thumb="item.imgUrl"
                     />
                 </LoadMore>
-            </van-pull-refresh>
+            </van-pull-refresh> -->
+            <betterScroll
+                :data="listData"
+                :listenScroll="true"
+                :scrollBottom="true"
+                :pullup="true"
+                @load="onLoadMore"
+            >
+                <van-card
+                    v-for="(item, index) in listData"
+                    :key="index"
+                    :price="item.realTimePrice"
+                    :desc="item.highOpinion"
+                    :title="item.skuName"
+                    :thumb="item.imgUrl"
+                />
+            </betterScroll>
         </div>
     </div>
 </template>
 
 <script>
 import { getDataList } from '@/api/classify';
-import LoadMore from '@/components/Load-more';
+// import LoadMore from '@/components/Load-more';
+import betterScroll from '@/components/better-scroll';
 
 export default {
     name: 'ClassifyAllGoods',
@@ -37,7 +54,7 @@ export default {
             default: () => [],
         },
     },
-    components: { LoadMore },
+    components: { betterScroll },
     data() {
         return {
             activeKey: 0,
@@ -64,7 +81,7 @@ export default {
         },
         onRefresh() {},
         onLoadMore() {
-            debugger;
+            console.log("滚动到底部");
         },
     },
     watch: {

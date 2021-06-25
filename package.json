@@ -9,6 +9,7 @@
         "start": "yarn run serve"
     },
     "dependencies": {
+        "@better-scroll/core": "^2.4.1",
         "axios": "^0.19.2",
         "babel-plugin-import": "^1.13.0",
         "compression-webpack-plugin": "^4.0.0",
