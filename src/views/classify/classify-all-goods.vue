@@ -24,10 +24,15 @@
             </van-pull-refresh> -->
             <betterScroll
                 :data="listData"
-                :listenScroll="true"
-                :scrollBottom="true"
-                :pullup="true"
                 @load="onLoadMore"
+                @pulldown="pulldown"
+                :pulldown="false"
+                :pullup="false"
+                @pullup="pullup"
+                :pulldown-loading.sync="bs.pulldownLoading"
+                :bottom-loading.sync="bs.pullupLoading"
+                :finished="bs.finished"
+                :scroll-list="true"
             >
                 <van-card
                     v-for="(item, index) in listData"
@@ -63,6 +68,11 @@ export default {
             listData: [],
             isLoading: '',
             enableLoadMore: true,
+            bs: {
+                pulldownLoading: false,
+                pullupLoading: false,
+                finished: false,
+            },
         };
     },
     computed: {
@@ -72,7 +82,7 @@ export default {
         },
     },
     created() {
-        this.getData();
+        // this.getData();
     },
     methods: {
         async getData() {
@@ -80,8 +90,27 @@ export default {
             this.listData = data.result.searchCatResultVOList[0].searchResultVOList.slice(0, 10);
         },
         onRefresh() {},
-        onLoadMore() {
-            console.log("滚动到底部");
+        async onLoadMore() {
+            const [data] = await getDataList();
+            setTimeout(() => {
+                this.listData = data.result.searchCatResultVOList[0].searchResultVOList.slice(0, 20);
+                this.bs.pullupLoading = false;
+                this.bs.finished = true;
+            }, 2000);
+        },
+        async pulldown() {
+            const [data] = await getDataList();
+            this.listData = data.result.searchCatResultVOList[0].searchResultVOList.slice(0, 10);
+            setTimeout(() => {
+                this.bs.pulldownLoading = false;
+            }, 1000);
+        },
+        async pullup() {
+            const [data] = await getDataList();
+            setTimeout(() => {
+                this.listData = data.result.searchCatResultVOList[0].searchResultVOList.slice(0, 20);
+                this.bs.pullupLoading = false;
+            }, 1000);
         },
     },
     watch: {
