@@ -15,6 +15,7 @@ import {
     Sticky,
     Card,
     PullRefresh,
+    Slider,
 } from 'vant';
 
 Vue.use(Button)
@@ -31,4 +32,5 @@ Vue.use(Button)
     .use(Sticky)
     .use(Card)
     .use(PullRefresh)
-    .use(SidebarItem);
+    .use(SidebarItem)
+    .use(Slider);
